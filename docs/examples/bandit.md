@@ -1,3 +1,5 @@
+from conjugate.models import binomial_beta
+
 # The multi-armed bandit problem
 
 We will assume a Bernoulli distribution of successes for each arm
@@ -15,13 +17,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Define true probabilities of success for each arm
-p = np.array([0.9, 0.5, 0.7])
+p = np.array([0.8, 0.9, 0.7, 0.3])
 n_arms = len(p)
 true_dist = Binomial(n=1, p=p)
 
 ```
 
 Helper functions:
+
 - sampling from the true distribution of given arm
 - create the statistics required for Bayesian update of exponential gamma model
 - single step in the Thompson sampling process
@@ -56,14 +59,15 @@ def thompson_step(estimate: Beta, rng) -> Beta:
     arm_sample = sample_true_distribution(arm_to_sample, rng=rng)
     x, n = bayesian_update_stats(arm_to_sample, arm_sample)
 
-    return bernoulli_beta(x=x, prior=estimate)
+    return binomial_beta(n=n,x=x, prior=estimate)
 ```
 
 After defining a prior / initial estimate for each of the distributions, we can use a for loop in
 order to perform the Thompson sampling and progressively update this estimate.
 
 ```python
-alpha = beta = np.ones(n_arms)
+alpha = np.ones(n_arms)*0.5
+beta = np.ones(n_arms)*0.5
 estimate = Beta(alpha, beta)
 
 rng = np.random.default_rng(42)
@@ -95,7 +99,7 @@ ax.set(
     xlabel="True Mean probability of success",
     ylabel="% of times sampled",
     ylim=(0, None),
-    title="Exploitation of Best Group",
+    title="Exploitation of Best Arm",
 )
 # Format yaxis as percentage
 ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{x:.0%}"))

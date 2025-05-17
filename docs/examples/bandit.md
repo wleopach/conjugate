@@ -1,5 +1,6 @@
-from conjugate.models import binomial_beta
-
+---
+comments: true
+---
 # The multi-armed bandit problem
 
 We will assume a Bernoulli distribution of successes for each arm
@@ -66,8 +67,8 @@ After defining a prior / initial estimate for each of the distributions, we can 
 order to perform the Thompson sampling and progressively update this estimate.
 
 ```python
-alpha = np.ones(n_arms)*0.5
-beta = np.ones(n_arms)*0.5
+alpha = np.ones(n_arms) * 0.5
+beta = np.ones(n_arms) * 0.5
 estimate = Beta(alpha, beta)
 
 rng = np.random.default_rng(42)
@@ -77,11 +78,10 @@ for _ in range(total_samples):
     estimate = thompson_step(estimate=estimate, rng=rng)
 ```
 
-We can see that the arm with the highest  probability of success was actually exploited the most!
+We can see that the arm with the highest probability of success was actually exploited the most!
 
 ```python
-
-fig, axes = plt.subplots(ncols=2)
+fig, axes = plt.subplots(ncols=2, figsize=(12,8))
 fig.suptitle("Thompson Sampling using conjugate-models")
 
 ax = axes[0]

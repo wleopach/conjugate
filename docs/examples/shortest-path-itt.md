@@ -524,7 +524,7 @@ fig, ax = plot_graph_with_path(
     edges,
     coordinates,
     weights=weights,  # Pass your weights dictionary
-    path=path,
+    path=path_,
     used_edges=used_edges,
     title='Graph with Shortest Path and Weights',
     path_color="yellow"
@@ -569,7 +569,7 @@ def bayesian_update_stats(
     n = np.zeros(n_edges)
 
     mask = [edge_to_index[edge] for edge in edges_sampled]
-    x[mask] = np.log(np.exp(edges_sample)) - (sigma_tilda ** 2) / 2
+    x[mask] = np.log(np.exp(edges_sample))
     n[mask] = 1
 
     return x, n

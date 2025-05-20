@@ -6,17 +6,26 @@ comments: true
 We will consider a directed graph $G=(V,E)$ with vertices $V=\{1,2,...,N\}$, edges $E\subset V \times V$ and
 mean travel times $\Theta \in \mathbb{R}^{E}$. Vertex 1 is the source and $N$ the destination.
 We will examine paths $x = (e_1, e_2, \ldots, e_k)$ where $e_i \in E$ for all $i \in \{1, 2, \ldots, k\}$ and
-$e_1 =(1, n)$ and $e_k =(1, m)$.
+$e_1 =(1, n)$ and $e_k =(m, N)$.
 
 Whenever we use a path $x$ for each edge $e$ we observe a travel time $y_{e}$.
-The prior distribution that we will use for the mean travel time $\theta_{e}$ is
-$$\theta_{e} \sim \text{LogNormal}(\mu_{e}, \sigma^2_{e}),$$
-where $$\mathbb{E}[\theta_{e}] = \Theta_{e} = e^{\mu_{e} + \sigma^2_{e}/2}.$$
+The prior distribution that we will use for the mean travel time $\theta_{e}$ is:
+$$
+\theta_{e} \sim \text{LogNormal}(\mu_{e}, \sigma^2_{e}),
+$$
+where
+$$
+\mathbb{E}[\theta_{e}] = \Theta_{e} = e^{\mu_{e} + \sigma^2_{e}/2}.
+$$
 
 We further assume that observed travel times are drawn from:
-$$y_e| \theta_e \sim \text{LogNormal}(\ln(\theta_e) - \frac{\tilde{\sigma}}{e}, \tilde{\sigma}^2_{e}),$$
+$$
+y_e| \theta_e \sim \text{LogNormal}(\ln(\theta_e) - \frac{\tilde{\sigma}}{2}, \tilde{\sigma}^2),
+$$
 so that:
-$$\mathbb{E}[y_e|\theta_{e}] = \theta_{e}$$
+$$
+\mathbb{E}[y_e|\theta_{e}] = \theta_{e}
+$$
 
 The update is given by:
 $$

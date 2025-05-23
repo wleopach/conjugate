@@ -506,6 +506,7 @@ fig, axes = plt.subplots(ncols=2, figsize=(16, 6))  # Wider figure
 fig.suptitle("Thompson Sampling using conjugate-models")
 edges_means = [(ordered_edges[k], round(float(means[k]),2)) for k in range(len(ordered_edges))]
 ax = axes[0]
+estimate.set_min_value(-1)
 estimate.set_max_value(2).plot_pdf(label=edges_means, ax=ax)
 # Place legend below the plot as a horizontal array
 ax.legend(title="True Mean (edge, mean)",

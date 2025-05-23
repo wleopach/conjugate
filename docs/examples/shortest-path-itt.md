@@ -551,7 +551,7 @@ edge_to_index = {ordered_edges[k]: k for k in range(len(ordered_edges))}
 means = np.array([np.log(weights[edge]) - (ini_sigma) ** 2 / 2 for edge in edges])
 sigma = np.ones(means.shape[0]) * (ini_sigma)
 true_dist = Normal(mu=means, sigma=sigma)
-
+path_selection_count = {}
 def sample_true_distribution(
         edges_to_sample: list,
         rng,
@@ -580,12 +580,16 @@ def thompson_step(estimate: Normal, rng) -> Normal:
     weights_ = {ordered_edges[k]: np.exp(sample[k]) for k in range(len(edges))}
     _, predecesors = dijkstra_with_paths(graph, start,weights_ )
     path, edges_to_sample = get_shortest_path(predecesors, 15)
-    print(path)
+    path_selection_count.setdefault(str(path),0)
+    path_selection_count[str(path)] += 1
     edges_sample = sample_true_distribution(edges_to_sample, rng=rng)
     x, n = bayesian_update_stats(edges_to_sample, edges_sample)
 
     return normal_known_variance(x_total=x, n=n, var=sigma_tilda, prior=estimate)
 ```
+
+### Ts simulation
+
 ```python
 mu = np.ones(len(edges)) * -0.5
 sigma = np.ones(len(edges))
@@ -599,3 +603,48 @@ for _ in range(total_samples):
 
 
 ```
+
+We can see that the edges that correspond to the shortest path  were actually exploited the most!
+
+```python
+
+fig, axes = plt.subplots(ncols=2, figsize=(16, 6))  # Wider figure
+fig.suptitle("Thompson Sampling using conjugate-models")
+edges_means = [(ordered_edges[k], round(float(means[k]),2)) for k in range(len(ordered_edges))]
+ax = axes[0]
+estimate.set_max_value(2).plot_pdf(label=edges_means, ax=ax)
+# Place legend below the plot as a horizontal array
+ax.legend(title="True Mean (edge, mean)",
+          bbox_to_anchor=(0.5, -0.15),  # Position below the plot
+          loc='upper center',           # Anchor at the top center of the bbox
+          ncol=3,                       # Arrange in 4 columns (adjust as needed)
+          frameon=True,                 # Add a frame
+          borderaxespad=0.)             # No padding between axes and legend
+ax.set(
+    xlabel="Mean log distance",
+    title="Posterior Distribution by edge",
+)
+
+ax = axes[1]
+sampled_paths = list(path_selection_count.keys())
+n_times_sampled = [path_selection_count[key] / total_samples for key in sampled_paths]
+ax.scatter(sampled_paths, n_times_sampled)
+ax.set(
+    xlabel="True Mean path use",
+    ylabel="% of times sampled",
+    ylim=(0, None),
+    title="Exploitation of Shortest Path",
+)
+# Format yaxis as percentage
+ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{x:.0%}"))
+
+# Rotate x-axis labels in the second subplot
+plt.setp(axes[1].get_xticklabels(), rotation=45, ha='right')
+
+# Adjust layout with additional bottom space for the legend
+plt.subplots_adjust(bottom=0.2)  # Increase bottom margin to accommodate legend
+plt.tight_layout()
+plt.show()
+```
+
+![path exploitation](./../images/path_exploitation.png)

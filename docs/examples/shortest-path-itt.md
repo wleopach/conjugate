@@ -73,7 +73,6 @@ coordinates = [(0, 0),
 
 ## Helper functions
 ### Plots and shortest path
-- Plot graph
 - Plot graph with path
 - Dijkstra algorithm
 - Get the shortest path
@@ -84,118 +83,6 @@ import heapq
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch
-
-def plot_graph(nodes, edges, coordinates, node_size=400, node_color='green',
-               edge_color='black', arrow_style='fancy', node_labels=True,
-               title='Graph Visualization', figsize=(12, 8), show=True):
-    """
-    Plot a directed graph with nodes and edges.
-
-    Parameters:
-    -----------
-    nodes : list or range
-        The nodes in the graph.
-    edges : set of tuples
-        The edges in the graph as (source, target) tuples.
-    coordinates : list of tuples
-        The (x, y) coordinates for each node.
-    node_size : int, optional
-        Size of the nodes. Default is 400.
-    node_color : str, optional
-        Color of the nodes. Default is 'green'.
-    edge_color : str, optional
-        Color of the edges. Default is 'black'.
-    arrow_style : str, optional
-        Style of the arrow. Default is 'fancy'.
-    node_labels : bool, optional
-        Whether to display node labels. Default is True.
-    title : str, optional
-        Title of the plot. Default is 'Graph Visualization'.
-    figsize : tuple, optional
-        Figure size. Default is (12, 8).
-    show : bool, optional
-        Whether to display the plot. Default is True.
-
-    Returns:
-    --------
-    fig, ax : matplotlib figure and axis objects
-        The figure and axis objects for further customization.
-    """
-
-
-    # Extract x and y coordinates
-    x_coords = [tup[0] for tup in coordinates]
-    y_coords = [tup[1] for tup in coordinates]
-
-    # Create figure and axis
-    fig, ax = plt.subplots(figsize=figsize)
-
-    # Node radius for determining arrow endpoints
-    node_radius = 0.2  # Adjust based on node size
-
-    # Plot directed edges with shortened arrows
-    for edge in edges:
-        start, end = edge
-
-        # Get start and end coordinates
-        start_x, start_y = x_coords[start], y_coords[start]
-        end_x, end_y = x_coords[end], y_coords[end]
-
-        # Calculate direction vector
-        dx = end_x - start_x
-        dy = end_y - start_y
-
-        # Calculate distance between nodes
-        length = np.sqrt(dx**2 + dy**2)
-
-        # Normalize direction vector
-        dx, dy = dx/length, dy/length
-
-        # Adjust start and end points to avoid overlapping with nodes
-        new_start_x = start_x + node_radius * dx
-        new_start_y = start_y + node_radius * dy
-        new_end_x = end_x - node_radius * dx
-        new_end_y = end_y - node_radius * dy
-
-        # Create an arrow with adjusted endpoints
-        arrow = FancyArrowPatch(
-            (new_start_x, new_start_y),
-            (new_end_x, new_end_y),
-            arrowstyle=arrow_style,
-            connectionstyle='arc3,rad=0',
-            color=edge_color,
-            lw=1.5,
-            alpha=0.7,
-            mutation_scale=20,  # Controls arrow head size
-        )
-        ax.add_patch(arrow)
-
-    # Plot nodes
-    ax.scatter(x_coords, y_coords, s=node_size, c=node_color, zorder=2)
-
-    # Add node labels if requested
-    if node_labels:
-        for i, (x, y) in enumerate(zip(x_coords, y_coords)):
-            ax.text(x, y, str(i), fontsize=12, ha='center', va='center',
-                   bbox=dict(facecolor='white', alpha=0.7, boxstyle='circle'))
-
-    # Add title
-    ax.set_title(title)
-
-    # Turn off axes
-    ax.axis('off')
-
-    # Set equal aspect ratio
-    ax.set_aspect('equal')
-
-    # Apply tight layout
-    plt.tight_layout()
-
-    # Show the plot if requested
-    if show:
-        plt.show()
-
-    return fig, ax
 
 def plot_graph_with_path(nodes, edges, coordinates, weights=None, path=None, used_edges=None,
                          node_size=400, node_color='green', edge_color='black',
@@ -518,7 +405,14 @@ start = 0
 end = 15
 distances, predecessors  = dijkstra_with_paths(graph, start, weights)
 path_, used_edges = get_shortest_path(predecessors, end)
-plot_graph(nodes,edges,coordinates, title='Example Graph')
+fig, ax = plot_graph_with_path(
+    nodes,
+    edges,
+    coordinates,
+    weights=weights,  # Pass your weights dictionary
+    title='Graph Visualization',
+    path_color="yellow"
+)
 fig, ax = plot_graph_with_path(
     nodes,
     edges,

@@ -47,27 +47,53 @@ from matplotlib.patches import FancyArrowPatch
 
 # Define the graph
 nodes = range(16)
-edges = {(0, 1), (0, 2),
-         (1, 3), (1, 4), (2, 4), (2, 5),
-         (3, 6), (3, 7), (4, 7), (4, 8), (5, 8), (5, 9),
-         (6, 10), (7, 10), (7, 11), (8, 11), (8, 12), (9, 12),
-         (10, 13), (11, 13), (11, 14), (12, 14),
-         (13, 15), (14, 15)
-         }
+edges = {
+    (0, 1),
+    (0, 2),
+    (1, 3),
+    (1, 4),
+    (2, 4),
+    (2, 5),
+    (3, 6),
+    (3, 7),
+    (4, 7),
+    (4, 8),
+    (5, 8),
+    (5, 9),
+    (6, 10),
+    (7, 10),
+    (7, 11),
+    (8, 11),
+    (8, 12),
+    (9, 12),
+    (10, 13),
+    (11, 13),
+    (11, 14),
+    (12, 14),
+    (13, 15),
+    (14, 15),
+}
 
 # Definition of the graph
-graph = {k: {l for l in nodes if (k,l) in edges} for k in nodes}
-coordinates = [(0, 0),
-               (1, 1), (1, -1),
-               (2, 2), (2, 0), (2, -2),
-               (3, 3), (3, 1), (3, -1), (3, -3),
-               (4, 2), (4, 0), (4, -2),
-               (5, 1), (5, -1),
-               (6, 0)
-               ]
-
-
-
+graph = {k: {l for l in nodes if (k, l) in edges} for k in nodes}
+coordinates = [
+    (0, 0),
+    (1, 1),
+    (1, -1),
+    (2, 2),
+    (2, 0),
+    (2, -2),
+    (3, 3),
+    (3, 1),
+    (3, -1),
+    (3, -3),
+    (4, 2),
+    (4, 0),
+    (4, -2),
+    (5, 1),
+    (5, -1),
+    (6, 0),
+]
 ```
 
 
@@ -84,12 +110,28 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch
 
-def plot_graph_with_path(nodes, edges, coordinates, weights=None, path=None, used_edges=None,
-                         node_size=400, node_color='green', edge_color='black',
-                         path_color='red', path_width=2.5, arrow_style='fancy',
-                         node_labels=True, weight_labels=True, weight_fontsize=10,
-                         weight_offset=0.1, title='Graph with Path',
-                         figsize=(12, 8), show=True):
+
+def plot_graph_with_path(
+    nodes,
+    edges,
+    coordinates,
+    weights=None,
+    path=None,
+    used_edges=None,
+    node_size=400,
+    node_color="green",
+    edge_color="black",
+    path_color="red",
+    path_width=2.5,
+    arrow_style="fancy",
+    node_labels=True,
+    weight_labels=True,
+    weight_fontsize=10,
+    weight_offset=0.1,
+    title="Graph with Path",
+    figsize=(12, 8),
+    show=True,
+):
     """
     Plot a directed graph with nodes, edges, weights, and an optional highlighted path.
 
@@ -170,7 +212,7 @@ def plot_graph_with_path(nodes, edges, coordinates, weights=None, path=None, use
         length = np.sqrt(dx**2 + dy**2)
 
         # Normalize direction vector
-        dx, dy = dx/length, dy/length
+        dx, dy = dx / length, dy / length
 
         # Adjust endpoints
         new_start_x = start_x + node_radius * dx
@@ -183,7 +225,7 @@ def plot_graph_with_path(nodes, edges, coordinates, weights=None, path=None, use
             (new_start_x, new_start_y),
             (new_end_x, new_end_y),
             arrowstyle=arrow_style,
-            connectionstyle='arc3,rad=0',
+            connectionstyle="arc3,rad=0",
             color=edge_color,
             lw=1.5,
             alpha=0.7,
@@ -199,15 +241,21 @@ def plot_graph_with_path(nodes, edges, coordinates, weights=None, path=None, use
 
             # Add a small perpendicular offset to avoid overlap with the arrow
             perp_dx = -dy  # Perpendicular to direction vector
-            perp_dy = dx   # Perpendicular to direction vector
+            perp_dy = dx  # Perpendicular to direction vector
 
             label_x = mid_x + weight_offset * perp_dx
             label_y = mid_y + weight_offset * perp_dy
 
             # Add weight label
-            ax.text(label_x, label_y, str(weights[edge]),
-                   fontsize=weight_fontsize, ha='center', va='center',
-                   bbox=dict(facecolor='white', alpha=0.8, boxstyle='round,pad=0.2'))
+            ax.text(
+                label_x,
+                label_y,
+                str(weights[edge]),
+                fontsize=weight_fontsize,
+                ha="center",
+                va="center",
+                bbox=dict(facecolor="white", alpha=0.8, boxstyle="round,pad=0.2"),
+            )
 
     # Then plot path edges, if any
     if used_edges:
@@ -226,7 +274,7 @@ def plot_graph_with_path(nodes, edges, coordinates, weights=None, path=None, use
             length = np.sqrt(dx**2 + dy**2)
 
             # Normalize direction vector
-            dx, dy = dx/length, dy/length
+            dx, dy = dx / length, dy / length
 
             # Adjust endpoints
             new_start_x = start_x + node_radius * dx
@@ -239,7 +287,7 @@ def plot_graph_with_path(nodes, edges, coordinates, weights=None, path=None, use
                 (new_start_x, new_start_y),
                 (new_end_x, new_end_y),
                 arrowstyle=arrow_style,
-                connectionstyle='arc3,rad=0',
+                connectionstyle="arc3,rad=0",
                 color=path_color,
                 lw=path_width,
                 alpha=0.9,
@@ -255,15 +303,28 @@ def plot_graph_with_path(nodes, edges, coordinates, weights=None, path=None, use
 
                 # Add a small perpendicular offset to avoid overlap with the arrow
                 perp_dx = -dy  # Perpendicular to direction vector
-                perp_dy = dx   # Perpendicular to direction vector
+                perp_dy = dx  # Perpendicular to direction vector
 
                 label_x = mid_x + weight_offset * perp_dx
                 label_y = mid_y + weight_offset * perp_dy
 
                 # Add weight label with different style for path edges
-                ax.text(label_x, label_y, str(weights[edge]),
-                       fontsize=weight_fontsize, ha='center', va='center', color='black', fontweight='bold',
-                       bbox=dict(facecolor='white', alpha=0.8, edgecolor=path_color, boxstyle='round,pad=0.2'))
+                ax.text(
+                    label_x,
+                    label_y,
+                    str(weights[edge]),
+                    fontsize=weight_fontsize,
+                    ha="center",
+                    va="center",
+                    color="black",
+                    fontweight="bold",
+                    bbox=dict(
+                        facecolor="white",
+                        alpha=0.8,
+                        edgecolor=path_color,
+                        boxstyle="round,pad=0.2",
+                    ),
+                )
 
     # Plot nodes with different colors for path nodes
     if path:
@@ -277,17 +338,24 @@ def plot_graph_with_path(nodes, edges, coordinates, weights=None, path=None, use
     # Add node labels if requested
     if node_labels:
         for i, (x, y) in enumerate(zip(x_coords, y_coords)):
-            ax.text(x, y, str(i), fontsize=12, ha='center', va='center',
-                   bbox=dict(facecolor='white', alpha=0.7, boxstyle='circle'))
+            ax.text(
+                x,
+                y,
+                str(i),
+                fontsize=12,
+                ha="center",
+                va="center",
+                bbox=dict(facecolor="white", alpha=0.7, boxstyle="circle"),
+            )
 
     # Add title
     ax.set_title(title)
 
     # Turn off axes
-    ax.axis('off')
+    ax.axis("off")
 
     # Set equal aspect ratio
-    ax.set_aspect('equal')
+    ax.set_aspect("equal")
 
     # Apply tight layout
     plt.tight_layout()
@@ -297,6 +365,7 @@ def plot_graph_with_path(nodes, edges, coordinates, weights=None, path=None, use
         plt.show()
 
     return fig, ax
+
 
 def dijkstra_with_paths(graph, start, weights):
     """
@@ -358,7 +427,6 @@ def dijkstra_with_paths(graph, start, weights):
     return distances, predecessors
 
 
-
 def get_shortest_path(predecessors, end):
     """
     Reconstruct the shortest path from start to end using predecessors.
@@ -397,21 +465,20 @@ def get_shortest_path(predecessors, end):
     # Reverse to get path from start to end
     return path[::-1], used_edges
 
+
 # we use some random distances for the set of edges
-weights = {
-    e: np.random.randint(1, 10) for e in edges
-}
+weights = {e: np.random.randint(1, 10) for e in edges}
 start = 0
 end = 15
-distances, predecessors  = dijkstra_with_paths(graph, start, weights)
+distances, predecessors = dijkstra_with_paths(graph, start, weights)
 path_, used_edges = get_shortest_path(predecessors, end)
 fig, ax = plot_graph_with_path(
     nodes,
     edges,
     coordinates,
     weights=weights,  # Pass your weights dictionary
-    title='Graph Visualization',
-    path_color="yellow"
+    title="Graph Visualization",
+    path_color="yellow",
 )
 fig, ax = plot_graph_with_path(
     nodes,
@@ -420,11 +487,9 @@ fig, ax = plot_graph_with_path(
     weights=weights,  # Pass your weights dictionary
     path=path_,
     used_edges=used_edges,
-    title='Graph with Shortest Path and Weights',
-    path_color="yellow"
+    title="Graph with Shortest Path and Weights",
+    path_color="yellow",
 )
-
-
 ```
 ![graph](./../images/graph.png)
 ![graph with path](./../images/graph_with_path.png)
@@ -446,18 +511,23 @@ means = np.array([np.log(weights[edge]) - (ini_sigma) ** 2 / 2 for edge in edges
 sigma = np.ones(means.shape[0]) * (ini_sigma)
 true_dist = Normal(mu=means, sigma=sigma)
 path_selection_count = {}
+
+
 def sample_true_distribution(
-        edges_to_sample: list,
-        rng,
-        true_dist: Normal = true_dist,
+    edges_to_sample: list,
+    rng,
+    true_dist: Normal = true_dist,
 ) -> float:
-    return [true_dist[edge_to_index[edge]].dist.rvs(random_state=rng) for edge in edges_to_sample]
+    return [
+        true_dist[edge_to_index[edge]].dist.rvs(random_state=rng)
+        for edge in edges_to_sample
+    ]
 
 
 def bayesian_update_stats(
-        edges_sampled: list,
-        edges_sample: list,
-        n_edges: int = len(edges),
+    edges_sampled: list,
+    edges_sample: list,
+    n_edges: int = len(edges),
 ) -> tuple[np.ndarray, np.ndarray]:
     x = np.zeros(n_edges)
     n = np.zeros(n_edges)
@@ -472,9 +542,9 @@ def bayesian_update_stats(
 def thompson_step(estimate: Normal, rng) -> Normal:
     sample = estimate.dist.rvs(random_state=rng)
     weights_ = {ordered_edges[k]: np.exp(sample[k]) for k in range(len(edges))}
-    _, predecesors = dijkstra_with_paths(graph, start,weights_ )
+    _, predecesors = dijkstra_with_paths(graph, start, weights_)
     path, edges_to_sample = get_shortest_path(predecesors, 15)
-    path_selection_count.setdefault(str(path),0)
+    path_selection_count.setdefault(str(path), 0)
     path_selection_count[str(path)] += 1
     edges_sample = sample_true_distribution(edges_to_sample, rng=rng)
     x, n = bayesian_update_stats(edges_to_sample, edges_sample)
@@ -494,27 +564,28 @@ rng = np.random.default_rng(42)
 total_samples = 250
 for _ in range(total_samples):
     estimate = thompson_step(estimate=estimate, rng=rng)
-
-
 ```
 
 We can see that the edges that correspond to the shortest path  were actually exploited the most!
 
 ```python
-
 fig, axes = plt.subplots(ncols=2, figsize=(16, 6))  # Wider figure
 fig.suptitle("Thompson Sampling using conjugate-models")
-edges_means = [(ordered_edges[k], round(float(means[k]),2)) for k in range(len(ordered_edges))]
+edges_means = [
+    (ordered_edges[k], round(float(means[k]), 2)) for k in range(len(ordered_edges))
+]
 ax = axes[0]
 estimate.set_min_value(-1)
 estimate.set_max_value(2).plot_pdf(label=edges_means, ax=ax)
 # Place legend below the plot as a horizontal array
-ax.legend(title="True Mean (edge, mean)",
-          bbox_to_anchor=(0.5, -0.15),  # Position below the plot
-          loc='upper center',           # Anchor at the top center of the bbox
-          ncol=3,                       # Arrange in 4 columns (adjust as needed)
-          frameon=True,                 # Add a frame
-          borderaxespad=0.)             # No padding between axes and legend
+ax.legend(
+    title="True Mean (edge, mean)",
+    bbox_to_anchor=(0.5, -0.15),  # Position below the plot
+    loc="upper center",  # Anchor at the top center of the bbox
+    ncol=3,  # Arrange in 4 columns (adjust as needed)
+    frameon=True,  # Add a frame
+    borderaxespad=0.0,
+)  # No padding between axes and legend
 ax.set(
     xlabel="Mean log distance",
     title="Posterior Distribution by edge",
@@ -534,7 +605,7 @@ ax.set(
 ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{x:.0%}"))
 
 # Rotate x-axis labels in the second subplot
-plt.setp(axes[1].get_xticklabels(), rotation=45, ha='right')
+plt.setp(axes[1].get_xticklabels(), rotation=45, ha="right")
 
 # Adjust layout with additional bottom space for the legend
 plt.subplots_adjust(bottom=0.2)  # Increase bottom margin to accommodate legend

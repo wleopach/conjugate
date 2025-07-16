@@ -9,7 +9,7 @@ test-generate-baseline: ## Generate baseline images for tests
 	uv run pytest --mpl-generate-path=tests/example-plots tests/test_example_plots.py
 
 test: ## Run tests
-	uv run pytest tests
+	uv run pytest tests --numprocesses auto
 
 cov:  ## Run tests and generate coverage report
 	uv run pytest tests

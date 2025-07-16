@@ -48,6 +48,7 @@ dev = [
     "pytest-mpl>=0.16.1,<0.17",
     "polars>=1.29.0",
     "narwhals>=1.39.0",
+    "pytest-xdist>=3.8.0",
 ]
 docs = [
     "marimo>=0.13.15",

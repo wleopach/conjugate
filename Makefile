@@ -9,7 +9,7 @@ test-generate-baseline: ## Generate baseline images for tests
 	uv run pytest --mpl-generate-path=tests/example-plots tests/test_example_plots.py
 
 test: ## Run tests
-	uv run pytest tests
+	uv run pytest tests --numprocesses auto
 
 cov:  ## Run tests and generate coverage report
 	uv run pytest tests
@@ -25,3 +25,6 @@ html: ## Serve documentation
 
 release: ## Kick off a new release pipeline
 	gh release create --generate-notes "v$(shell grep -E "^version" pyproject.toml | sed 's/[^0-9\.]*//g')"
+
+explorer:  ## Kick off local explorer notebook
+	uv run marimo edit docs/explorer.py
